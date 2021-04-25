@@ -1,13 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { auth, db } from '../Config/Config'
 import { CartContext } from '../Global/CartContext'
+import { ProductsContext } from '../Global/ProductsContext'
 import { Navbar } from './Navbar';
 import { useHistory } from 'react-router-dom'
 
 export const Cashout = (props) => {
 
     const history = useHistory();
-
+    const  {deleteUserProducts} = useContext(ProductsContext);
     const { shoppingCart, totalPrice, totalQty, dispatch } = useContext(CartContext);
 
     // defining state
@@ -48,6 +49,7 @@ export const Cashout = (props) => {
                     products: shoppingCart.map(item => item.ProductID),
                     status: 'confirmed'
                 }).then(() => {
+                    deleteUserProducts(props.userId);
                     setCell('');
                     setAddress('');
                     dispatch({ type: 'EMPTY' })

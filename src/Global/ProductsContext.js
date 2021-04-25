@@ -15,6 +15,7 @@ export class ProductsContextProvider extends React.Component {
 
         this.deleteProduct = this.deleteProduct.bind(this);
         this.getProducts = this.getProducts.bind(this);
+        this.deleteUserProducts = this.deleteUserProducts.bind(this);
 
         const userProducts = this.state.userProducts;
         db.collection('UserProduct').onSnapshot(snapshot => {
@@ -93,6 +94,32 @@ export class ProductsContextProvider extends React.Component {
         })
     }
 
+    deleteUserProducts = (userId) => {
+        db.collection('UserProduct').where('UserId', '==', userId).get()
+        .then(snapshot => {
+            snapshot.forEach(up => {
+                db.collection('UserProduct').doc(up.id).delete().then(()=>{
+                    const userProducts = [];
+                    db.collection('UserProduct').onSnapshot(snapshot => {
+                        let changes = snapshot.docChanges();
+                        changes.forEach(change => {
+                            if (change.type === 'added') {
+                                userProducts.push({
+                                    userProduct: change.doc.id,
+                                    userId: change.doc.data().UserId,
+                                    productId: change.doc.data().ProductId,
+                                })
+                            }
+                    this.setState({
+                    userProducts: userProducts
+                })
+            });
+        })
+                });
+            })
+        })
+    }
+
     getProducts = () => {
         const prevProducts = [];
         db.collection('Products').onSnapshot(snapshot => {
@@ -117,7 +144,7 @@ export class ProductsContextProvider extends React.Component {
 
     render() {
         return (
-            <ProductsContext.Provider  value={{ products: [...this.state.products], productTypes: [...this.state.productTypes], userProducts: [...this.state.userProducts], deleteProduct: this.deleteProduct, getProducts: this.getProducts }}>
+            <ProductsContext.Provider  value={{ products: [...this.state.products], productTypes: [...this.state.productTypes], userProducts: [...this.state.userProducts], deleteProduct: this.deleteProduct, getProducts: this.getProducts, deleteUserProducts: this.deleteUserProducts }}>
                 {this.props.children}
             </ProductsContext.Provider>
         )
