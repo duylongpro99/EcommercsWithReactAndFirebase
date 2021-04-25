@@ -70,7 +70,7 @@ export const Navbar = ({ user, userId, avatar, isAdmin }) => {
                 <span style = {{position: 'relative'}}><Link to="/cartproducts" className='navlink'><Icon icon={cart} /></Link>
                 <span className='no-of-products'>{totalQty}</span>
                 </span>
-                <span style = {{marginLeft: '10px'}}><button onClick = {goToOrders} type="button" className="btn btn-outline-dark">Orders <i className="fa fa-money" aria-hidden="true"></i></button></span>
+                <span style = {{verticalAlign: 'middle'}} onClick = {goToOrders}><i className="fa fa-money orders" aria-hidden="true" ></i></span>
                 <span><button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button></span>
             </div>}
             <div className="noty-panel"  hidden = {!isToggle}>

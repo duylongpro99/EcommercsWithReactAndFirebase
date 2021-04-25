@@ -83,13 +83,14 @@ body {
     color: #000;
     font-size: 20px;
 }
-.navbox .rightside .bell {
+.navbox .rightside .bell,.orders {
     height: 25px;
     font-size: 25px;
     width: 25px;
     color: #b56826;
     cursor: pointer;
 }
+
 
 .navbox .rightside span .navlink i svg{
     height: 25px;
