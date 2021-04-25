@@ -33,7 +33,7 @@ export const Navbar = ({ user, userId, avatar, isAdmin }) => {
 
     const updateCheckMessage = (e, m) => {
         e.preventDefault();
-        db.collection('ChatHub').where('toUserId', '==', m.userId).get()
+        db.collection('ChatHub').where('toUserId', '==', m.toUserId).get()
         .then(snapshot => {
             snapshot.forEach(m => {
                 db.collection('ChatHub').doc(m.id).update({
@@ -64,9 +64,11 @@ export const Navbar = ({ user, userId, avatar, isAdmin }) => {
                     <img className="small-user-avatar" src = {avatar ? avatar : require('../images/user.png')} />
                     <Link to={`/user-detail/${userId}`} className='navlink'>{user}</Link>
                 </span>
-                <span style = {{position: 'relative'}} onClick = {(e) => setIsToggle(!isToggle)} className = "bell-icon"><i className="fa fa-bell-o bell" aria-hidden="true"></i>
-                <span className='no-of-products'>{unRead}</span>
-                </span>
+                {isAdmin ? 
+                    <span style = {{position: 'relative'}} onClick = {(e) => setIsToggle(!isToggle)} className = "bell-icon"><i className="fa fa-bell-o bell" aria-hidden="true"></i>
+                    <span className='no-of-products'>{unRead}</span>
+                    </span>
+                :null}
                 <span style = {{position: 'relative'}}><Link to="/cartproducts" className='navlink'><Icon icon={cart} /></Link>
                 <span className='no-of-products'>{totalQty}</span>
                 </span>

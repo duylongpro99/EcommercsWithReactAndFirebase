@@ -11,6 +11,7 @@ toast.configure();
 
 export const ChatHub = (props) => {
     const { conversation} = useContext(ChatContext);
+    const [chat, setChat] = useState([])
     const history = useHistory();
     const messageRef = useRef(null);
     const {userId} = useParams(); 
@@ -41,8 +42,9 @@ export const ChatHub = (props) => {
             if (!user) {
                 history.push('/login');
             }
-        })
-        console.log(conversation)
+        });
+        let chat = conversation.sort((a, b) => Number(b.from) - Number(a.from) );
+        setChat(chat)
     }, [conversation.length, listMessageUnRead.length, unRead]);
 
     return (
@@ -52,7 +54,7 @@ export const ChatHub = (props) => {
             </div>
             <div className='container chat-container' style ={{flex : 15}}>
                 <div className="chat-content">
-                    {conversation.map((m,i) => {
+                    {chat.map((m,i) => {
                         if ((m.userId === props.userId && !props.isAdmin) || (m.userId === adminId && props.isAdmin && m.toUserId ===  userId)){
                             return(
                                 <div className="self-message" key = {i}>
@@ -60,7 +62,7 @@ export const ChatHub = (props) => {
                                         <img  className = "self-avatar-img" alt = "user" src = {props.avatar ? props.avatar : require('../images/user.png')}/>
                                     </div>
                                     <div className="self-text-message">
-                                        <p className = "self-text-message-content">{m.content}</p>
+                                        <p className = "self-text-message-content">{m.content }</p>
                                     </div>
                                 </div>
 
@@ -74,7 +76,7 @@ export const ChatHub = (props) => {
                                         <img className = "position-user-avatar-img" alt = "user" src = { m.avatar ? m.avatar : require('../images/user.png')}/>
                                     </div>
                                     <div className="position-user-text-message">
-                                        <p className = "position-user-text-message-content">{m.content}</p>
+                                        <p className = "position-user-text-message-content">{m.content }</p>
                                     </div>
                                 </div>
                             )

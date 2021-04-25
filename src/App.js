@@ -71,7 +71,6 @@ export class App extends Component {
     render() {
         return (
             <ChatContextProvider>
-
                 <ProductsContextProvider>
                     <CartContextProvider>
                         <BrowserRouter>
