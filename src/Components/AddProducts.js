@@ -64,7 +64,8 @@ export const AddProducts = ({user, userId, avatar, isAdmin}) => {
             ProductName: productName,
             ProductPrice: Number(productPrice),
             ProductImg: productImg,
-            ProductType: productType
+            ProductType: productType,
+            rating: [],
         }).then(() => {
             setProductName('');
             setProductPrice(0)
