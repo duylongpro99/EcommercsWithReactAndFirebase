@@ -97,7 +97,7 @@ export const Products = ({userId, isAdmin}) => {
                                 <img src={product.ProductImg} alt="not found" />
                                 {product.ProductSale ? 
                                     <div className = "discount">
-                                        Sale {displayNumber(product.ProductSale)}đ
+                                        Sale {displayNumber(product.ProductSale)}$
                                     </div>
                                 : null}
                             </div>
@@ -105,7 +105,7 @@ export const Products = ({userId, isAdmin}) => {
                                 {product.ProductName}
                             </div>
                             <div className='product-price'>
-                                {displayNumber(product.ProductPrice) }  VNĐ
+                                {displayNumber(product.ProductPrice) }  $
                                 
                             </div>
                              {isAdmin ? 

@@ -198,9 +198,9 @@ export const ProductDetail = (props) => {
                         </div>
                         <div className="col-md-4 col-sm-12 d-flex align-items-end">
                             {productSale > 0 ? (<>
-                                <p style={{fontSize :'24px', fontWeight:'bold'}} class="text-success">{productPrice - productSale + 'đ'}</p>
-                                <p style={{textDecorationLine:'line-through'}} class="text-secondary">{' ' + productPrice + 'đ'}</p></>
-                            ) : ( <p style={{fontSize :'24px', fontWeight:'bold'}} class="text-success">{productPrice + 'đ'}</p>)}
+                                <p style={{fontSize :'24px', fontWeight:'bold'}} class="text-success">{productPrice - productSale + '$'}</p>
+                                <p style={{textDecorationLine:'line-through'}} class="text-secondary">{' ' + productPrice + '$'}</p></>
+                            ) : ( <p style={{fontSize :'24px', fontWeight:'bold'}} class="text-success">{productPrice + '$'}</p>)}
                             
                         </div>
                     </div>

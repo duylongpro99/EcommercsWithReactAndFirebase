@@ -584,3 +584,25 @@ h1 {
 
 }
 
+.cashout-link{
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.cashout-link:hover{
+    text-decoration: none;
+}
+
+.cashout{
+    width: 50%;
+}
+
+.cashout-form-container{
+    display: flex;
+    justify-content: center;
+}
+
+.cashout-button{
+    width: 100%;
+}

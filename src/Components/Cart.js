@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CartContext } from '../Global/CartContext'
 import { Navbar } from './Navbar';
 import { Icon } from 'react-icons-kit'
@@ -16,7 +16,8 @@ export const Cart = ({ user, userId, avatar, isAdmin }) => {
 
     const { shoppingCart, dispatch, totalPrice, totalQty } = useContext(CartContext);
     const { products, userProducts } = useContext(ProductsContext);
-    const {unRead, listMessageUnRead} = useContext(ChatContext)
+    const {unRead, listMessageUnRead} = useContext(ChatContext);
+    const [checkout, setCheckout] = useState(false)
 
 
     const history = useHistory();
@@ -51,7 +52,7 @@ export const Cart = ({ user, userId, avatar, isAdmin }) => {
 
                             <div className='cart-name'>{cart.ProductName}</div>
 
-                            <div className='cart-price-orignal'>{displayNumber(cart.ProductPrice)} VNĐ</div>
+                            <div className='cart-price-orignal'>{displayNumber(cart.ProductPrice)} $</div>
 
                             <div className='inc' onClick={() => dispatch({ type: 'INC', id: cart.ProductID, cart })}>
                                 <Icon icon={ic_add} size={24} />
@@ -64,7 +65,7 @@ export const Cart = ({ user, userId, avatar, isAdmin }) => {
                             </div>
 
                             <div className='cart-price'>
-                                {displayNumber(cart.TotalProductPrice)} VNĐ
+                                {displayNumber(cart.TotalProductPrice)} $
                             </div>
 
                             <button className='delete-btn' onClick={() => dispatch({ type: 'DELETE', id: cart.ProductID, cart, userId: userId })}>
@@ -79,15 +80,15 @@ export const Cart = ({ user, userId, avatar, isAdmin }) => {
                         </div>
                         <div className='cart-summary-price'>
                             <span>Total Price</span>
-                            <span>{totalPrice}</span>
+                            <span>{totalPrice} $</span>
                         </div>
                         <div className='cart-summary-price'>
-                            <span>Total Qty</span>
+                            <span>Total Quantity</span>
                             <span>{totalQty}</span>
                         </div>
                         <Link to='cashout' className='cashout-link'>
                             <button className='btn btn-outline-success btn-md' style={{ marginTop: 5 + 'px' }}>
-                                Cash on delivery
+                                Order
                         </button>
                         </Link>
                     </div>}
