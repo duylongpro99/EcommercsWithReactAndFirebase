@@ -20,8 +20,10 @@ import {
   Container,
   Grid,
 } from "@material-ui/core";
+import { OrdersContext } from "../Global/OrdersContext";
 
 function Orders({ userId, user, avatar }) {
+  const { deleteOrder } = useContext(OrdersContext);
   const [orders, setOrders] = useState([]);
   const [stars, setStars] = useState(1);
   const [comment, setComment] = useState("");
@@ -108,7 +110,14 @@ function Orders({ userId, user, avatar }) {
   }, []);
 
   const history = useHistory();
-  const OrderComponent = ({ title, value }) => {
+
+  const onDeleteOrder = (e, orderId) => {
+    e.preventDefault();
+    deleteOrder(orderId, userId);
+    getDoc();
+  }
+
+  const OrderComponent = ({ title, value, orderId }) => {
     return (
       <div className="d-flex flex-column">
         <div className="text-muted">{title}</div>
@@ -117,6 +126,7 @@ function Orders({ userId, user, avatar }) {
           className={title == "Status" ? statusColor[value] : ""}
         >
           {value}{" "}
+          {title === "Status" && value === "confirmed" ? <button className="ml-2 btn btn-danger" onClick={(e) => onDeleteOrder(e, orderId)}>Cancel</button>: null}
         </div>
       </div>
     );
@@ -203,7 +213,7 @@ function Orders({ userId, user, avatar }) {
                       title={"Total"}
                       value={item.data.BuyerPayment}
                     />
-                    <OrderComponent title={"Status"} value={item.data.status} />
+                    <OrderComponent title={"Status"} value={item.data.status} orderId={item.id} />
                     <i
                       onClick={() => handleOrderDetail(item.id)}
                       className="fa fa-angle-right"

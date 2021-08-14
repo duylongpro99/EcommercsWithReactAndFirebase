@@ -13,10 +13,11 @@ export class OrdersContextProvider extends React.Component {
     }
     componentDidMount() {
 
-        this.deleteOrders = this.deleteOrders.bind(this);
+        // this.deleteOrders = this.deleteOrders.bind(this);
         this.getOrders = this.getOrders.bind(this);
         this.deleteUserProducts = this.deleteUserProducts.bind(this);
         this.updateOrderStatus = this.updateOrderStatus.bind(this);
+        this.deleteOrder = this.deleteOrder.bind(this);
 
         const userProducts = this.state.userProducts;
         db.collection('UserProduct').onSnapshot(snapshot => {
@@ -94,29 +95,29 @@ export class OrdersContextProvider extends React.Component {
         })
     }
 
-    deleteOrders  = (p) => {
-        db.collection('Products').doc(p.ProductID).delete().then(() => {
-            const prevProducts = [];
-            db.collection('Products').onSnapshot(snapshot => {
-                let changes = snapshot.docChanges();
-                changes.forEach(change => {
-                    if (change.type === 'added') {
-                        prevProducts.push({
-                            ProductID: change.doc.id,
-                            ProductName: change.doc.data().ProductName,
-                            ProductPrice: change.doc.data().ProductPrice,
-                            ProductImg: change.doc.data().ProductImg,
-                            ProductType: change.doc.data().ProductType,
-                            ProductSale: change.doc.data().ProductSale,
-                        })
-                    }
-                    this.setState({
-                        products: prevProducts
-                    })
-                })
-            })
-        })
-    }
+    // deleteOrders  = (p) => {
+    //     db.collection('Products').doc(p.ProductID).delete().then(() => {
+    //         const prevProducts = [];
+    //         db.collection('Products').onSnapshot(snapshot => {
+    //             let changes = snapshot.docChanges();
+    //             changes.forEach(change => {
+    //                 if (change.type === 'added') {
+    //                     prevProducts.push({
+    //                         ProductID: change.doc.id,
+    //                         ProductName: change.doc.data().ProductName,
+    //                         ProductPrice: change.doc.data().ProductPrice,
+    //                         ProductImg: change.doc.data().ProductImg,
+    //                         ProductType: change.doc.data().ProductType,
+    //                         ProductSale: change.doc.data().ProductSale,
+    //                     })
+    //                 }
+    //                 this.setState({
+    //                     products: prevProducts
+    //                 })
+    //             })
+    //         })
+    //     })
+    // }
 
     deleteUserProducts = (userId) => {
         db.collection('UserProduct').where('UserId', '==', userId).get()
@@ -170,18 +171,41 @@ export class OrdersContextProvider extends React.Component {
         })
     }
 
-    updateOrderStatus = (orderId, status) => {
+    updateOrderStatus = (orderId, status, order, userId) => {
+        console.log(order, userId);
         let orderRef = db.collection('AllBuyer').doc(orderId);
         orderRef.update({
             status: status
         }).then(()=>{
             this.getOrders();
+            let _orderRef = db.collection('Buyer-info '+ userId).doc(order);
+            _orderRef.update({
+                status: status
+            })
+        });
+
+
+    }
+
+    deleteOrder = (orderId, userId) => {
+        console.log(orderId);
+        db.collection('AllBuyer').where('OrderId', '==', orderId).get()
+        .then(snapshot => {
+            snapshot.forEach(up => {
+                console.log(up);
+                db.collection('AllBuyer').doc(up.id).delete()
+                .then(() => {
+                    db.collection('Buyer-info '+ userId).doc(orderId).delete().then(() => {
+                        this.getOrders();
+                    })
+                })
+            })
         });
     }
 
     render() {
         return (
-            <OrdersContext.Provider  value={{ allorders: [...this.state.allorders], getOrders: this.getOrders, updateOrderStatus: this.updateOrderStatus}}>
+            <OrdersContext.Provider  value={{ allorders: [...this.state.allorders], getOrders: this.getOrders, updateOrderStatus: this.updateOrderStatus, deleteOrder: this.deleteOrder}}>
                 {this.props.children}
             </OrdersContext.Provider>
         )

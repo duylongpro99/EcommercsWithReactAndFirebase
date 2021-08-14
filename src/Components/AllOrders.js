@@ -56,20 +56,20 @@ function AllOrders({ userId, user, avatar, isAdmin }) {
     }
   }, [allorders.length]);
 
-  const onUpdateOrder = (e, status, orderId) => {
+  const onUpdateOrder = (e, status, orderId, order, userId) => {
     e.preventDefault();
-    updateOrderStatus(orderId, status);
+    updateOrderStatus(orderId, status, order, userId);
   }
 
   const history = useHistory();
-  const OrderComponent = ({ title, value, orderId }) => {
+  const OrderComponent = ({ title, value, orderId, order, userId }) => {
     return (
       <div className="d-flex flex-column">
         <div className="text-muted">{title}</div>
         <div style={{ fontWeight: "bold" }} className={title === "Status" ? statusColor[value] : ""} >
           {value}{title === "Total" ? "$" : " "}
-          {title === "Status" && value === "confirmed" ? <button className="ml-2 btn btn-info" onClick={(e) => onUpdateOrder(e, 'shipped', orderId)}>shipped</button>: null}
-          {title === "Status" && value === "shipped" ? <button className="ml-2 btn btn-success" onClick={(e) => onUpdateOrder(e, 'delivered', orderId)}>delivered</button>: null}
+          {title === "Status" && value === "confirmed" ? <button className="ml-2 btn btn-info" onClick={(e) => onUpdateOrder(e, 'shipped', orderId, order, userId)}>shipped</button>: null}
+          {title === "Status" && value === "shipped" ? <button className="ml-2 btn btn-success" onClick={(e) => onUpdateOrder(e, 'delivered', orderId, order, userId)}>delivered</button>: null}
         </div>
       </div>
     );
@@ -92,7 +92,7 @@ function AllOrders({ userId, user, avatar, isAdmin }) {
                 <div key={item.id} className="border border-2 rounded bg-white" style={{ maxWidth: "100%", width: "100%" }} >
                   <div className="d-flex d-flex justify-content-between align-items-center p-3">
                     <OrderComponent title={"Total"} value={item.BuyerPayment} orderId={item.DocId}/>
-                    <OrderComponent title={"Status"} value={item.status} orderId={item.DocId}/>  
+                    <OrderComponent title={"Status"} value={item.status} orderId={item.DocId} order={item.OrderId} userId={item.userId}/>  
                     <OrderComponent title={"Name"} value={item.BuyerName} orderId={item.DocId}/>  
                     <OrderComponent title={"Email"} value={item.BuyerEmail} orderId={item.DocId}/>  
                   </div>
