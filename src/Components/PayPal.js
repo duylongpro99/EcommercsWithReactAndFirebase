@@ -49,6 +49,18 @@ export default function PayPal({totalPrice, userId, name, email, cellPhone, addr
                             PayerIdPayPal: data.payerID ? data.payerID : null,
                             status: 'confirmed'
                         }).then(() => {
+                            db.collection('AllBuyer').add({
+                                status: 'confirmed',
+                                UserId: user.uid,
+                                OrderId: '_' + time,
+                                payerName: name,
+                                BuyerName: name,
+                                BuyerEmail: email,
+                                BuyerCell: cellPhone,
+                                BuyerAddress: address,
+                                BuyerPayment: totalPrice,
+                                BuyerQuantity: totalQty,
+                            });
                             deleteUserProducts(userId);
                             resetCellPhone('');
                             resetAddress('');
@@ -56,7 +68,7 @@ export default function PayPal({totalPrice, userId, name, email, cellPhone, addr
                             resetSucessNoti('Your order has been placed successfully. Thanks for visiting us. You will be redirected to home page after 5 seconds');
                             setTimeout(() => {
                                 history.push('/')
-                            }, 5000)
+                            }, 3000)
                         })
                     }
                 })

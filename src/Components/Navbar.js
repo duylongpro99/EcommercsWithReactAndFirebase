@@ -31,6 +31,10 @@ export const Navbar = ({ user, userId, avatar, isAdmin }) => {
         history.push('/orders')
     }
 
+    const goToAllOrders = () => {
+        history.push('/all-orders');
+    }
+
     const updateCheckMessage = (e, m) => {
         e.preventDefault();
         db.collection('ChatHub').where('toUserId', '==', m.toUserId).get()
@@ -73,6 +77,7 @@ export const Navbar = ({ user, userId, avatar, isAdmin }) => {
                 <span className='no-of-products'>{totalQty}</span>
                 </span>
                 <span style = {{verticalAlign: 'middle'}} onClick = {goToOrders}><i className="fa fa-money orders" aria-hidden="true" ></i></span>
+                {isAdmin ? <span><button type="button" className="btn btn-outline-success" onClick={goToAllOrders} >All Orders</button></span>:null}
                 <span><button type="button" className="btn btn-outline-danger" onClick={handleLogout}>Logout</button></span>
             </div>}
             <div className="noty-panel"  hidden = {!isToggle}>
